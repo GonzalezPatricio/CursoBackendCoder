@@ -18,6 +18,16 @@ export class controlProducto {
     getProductoXid(id){
         return productos.filter((prod)=> prod.id === parseInt(id))[0];
     }
+    update(id, producto){
+        productos = productos.map(prod => {
+                if (prod.id === parseInt(id)) {
+                    prod.title = producto.title
+                    prod.price = producto.price
+                    prod.thumbnail = producto.thumbnail
+                }
+            return prod
+        })
+    }
     delete(id) {
         productos = productos.filter((prod)=> prod.id !== parseInt(id));
     }
