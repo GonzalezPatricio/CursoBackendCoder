@@ -12,7 +12,6 @@ import routers  from "./routes/form.js";
 
 
 
-
 const Prod = new controlProducto();
 const app = express();
 const port = 8080;
