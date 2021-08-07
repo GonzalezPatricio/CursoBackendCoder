@@ -4,10 +4,8 @@ export class controlProducto {
     constructor(){}
     
     add(producto){
-        if (producto.title === "" || typeof producto.title === "undefined") return false;
         producto.id = productos.length + 1;
         productos.push(producto);
-        return true
     }
 
     get(){

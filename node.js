@@ -5,19 +5,26 @@
     thumbnail: (url que se te ocurra)
 }
 */
+/*
+- http://localhost:8080/front (da el formulario para la adhesion de productos)
+- 
+- http://localhost:8080/appi/productos/vistas (tre los productos agregados)
+*/
 
-import express from "express"
-import{ controlProducto } from "./manejadorProducto/productos.js"
-import routers  from "./routes/form.js";
+import express from "express";
+import { controlProducto } from "./manejadorProducto/productos.js";
+import routers from "./routes/form.js";
+import exphbs from "express-handlebars";
+import path from 'path';
 
 
-
-const Prod = new controlProducto();
 const app = express();
 const port = 8080;
 const productsRouter = express.Router();
 const formRoute = routers;
 let productos = [];
+const Prod = new controlProducto();
+const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -25,15 +32,24 @@ app.use(express.urlencoded({ extended: true}));
 app.use("/appi/productos", productsRouter);
 app.use("/front", formRoute);
 
+//ACA USAMOS HANDLEBARS
+app.engine('hbs', exphbs({
+    extname: "hbs",
+    defaultLayout: "vista.hbs",
+    layoutsDir: __dirname + "/views",
+}));
+app.set("views", "./views");
+app.set('view engine', 'hbs');
 
-productsRouter.get("/", (req, res)=>{
-    const Prods = Prod.get()
-    if (!Prods){
-        return res.status(404).json({
-            error: "Productos no encontrados o cargados",
-        });
-    }
-    res.json(Prods);
+//ACA USAMOS ROUTER DE EXPRESS
+
+productsRouter.get("/vistas", (req, res)=>{
+    let pros = Prod.get()  
+    res.render("vista", {
+        productos: pros,
+        hayProductos: pros.length
+    });
+    console.log(pros)
 });
 
 
