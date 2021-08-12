@@ -14,7 +14,6 @@
 import express from "express";
 import { controlProducto } from "./manejadorProducto/productos.js";
 import routers from "./routes/form.js";
-import exphbs from "express-handlebars";
 import path from 'path';
 
 
@@ -29,19 +28,26 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true}));
-app.use("/appi/productos", productsRouter);
-app.use("/front", formRoute);
 
-//ACA USAMOS HANDLEBARS
-app.engine('hbs', exphbs({
-    extname: "hbs",
-    defaultLayout: "vista.hbs",
-    layoutsDir: __dirname + "/views",
-}));
-app.set("views", "./views");
-app.set('view engine', 'hbs');
+
+//ACA USAMOS EJS
+app.set('views','./views');
+app.set('view engine', 'ejs');
+
+app.get('/vista', (req, res) => {
+    res.render('inicio.ejs', { productos });
+});
+
+app.post('/productos', (req, res) => {
+    producto.push(req.body)
+    console.log(productos)
+    res.redirect('/vista')
+});
+
 
 //ACA USAMOS ROUTER DE EXPRESS
+// app.use("/appi/productos", productsRouter);
+// app.use("/front", formRoute);
 
 productsRouter.get("/vistas", (req, res)=>{
     let pros = Prod.get()  
